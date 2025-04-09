@@ -1,8 +1,7 @@
-/*
+ /*
 	queue
 	This question requires you to use queues to implement the functionality of the stac
 */
-// I AM NOT DONE
 
 #[derive(Debug)]
 pub struct Queue<T> {
@@ -68,14 +67,35 @@ impl<T> myStack<T> {
     }
     pub fn push(&mut self, elem: T) {
         //TODO
+        self.q1.enqueue(elem);
     }
     pub fn pop(&mut self) -> Result<T, &str> {
         //TODO
-		Err("Stack is empty")
+        if self.q1.is_empty() {
+            return Err("Stack is empty");
+        }
+
+        // 将q1中除最后一个元素外的所有元素转移到q2
+        while self.q1.size() > 1 {
+            let val = self.q1.dequeue().unwrap(); // 我们知道队列不为空
+            self.q2.enqueue(val);
+        }
+
+        // 获取q1的最后一个元素(即栈顶)
+        let result = self.q1.dequeue().unwrap();
+
+        // 交换q1和q2，使q1总是主队列
+        std::mem::swap(&mut self.q1, &mut self.q2);
+
+        Ok(result)
+
     }
     pub fn is_empty(&self) -> bool {
 		//TODO
-        true
+        if self.q1.is_empty() {
+            return true;
+        }
+        false
     }
 }
 

@@ -2,7 +2,6 @@
 	heap
 	This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
 
 use std::cmp::Ord;
 use std::default::Default;
@@ -37,7 +36,19 @@ where
     }
 
     pub fn add(&mut self, value: T) {
-        //TODO
+        //TODO:
+        self.count += 1;
+        let mut index = self.count;
+        self.items.push(value);
+        while index > 1 {
+            if (self.comparator)(&self.items[index], &self.items[index / 2]) {
+                self.items.swap(index, index / 2);
+                index = index / 2;
+            } else {
+                break;
+            }
+        }
+
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -85,7 +96,31 @@ where
 
     fn next(&mut self) -> Option<T> {
         //TODO
-		None
+		if self.is_empty() {
+            return None;
+        }
+
+        self.items.swap(1, self.count);
+        self.count -= 1;
+        let ret = self.items.pop();
+
+        let mut index =1;
+        while index <= self.count / 2 {
+            let mut smallest = self.left_child_idx(index);
+            let right = self.right_child_idx(index);
+                    if right <= self.count && (self.comparator)(&self.items[right], &self.items[smallest]) {
+                        self.items.swap(right, smallest);
+                        index = right;
+                    }
+                    if (self.comparator)(&self.items[index], &self.items[smallest]){
+                        break;
+                    }
+            self.items.swap(index, smallest);
+            index = smallest;
+
+
+        }
+        return ret;
     }
 }
 
